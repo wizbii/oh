@@ -1,52 +1,69 @@
-/* global describe, it, expect */
+/* global describe, it */
 
-const oh = require('./index')
+var assert = require('assert');
+var oh = require('./index');
 
 describe('oh', function () {
   it('should handle arrays', function () {
-    expect(oh(['foo', 'bar', 'quz'])).toBe('foo-bar-quz')
-  })
+    assert.equal(oh(['foo', 'bar', 'quz']), 'foo-bar-quz');
+  });
 
   it('should handle objects', function () {
-    expect(oh({ foo: 'bar', quz: 'baz' })).toBe('foo-bar-quz-baz')
-  })
+    assert.equal(oh({ foo: 'bar', quz: 'baz' }), 'foo-bar-quz-baz');
+  });
 
   it('should sort object keys', function () {
-    expect(oh({ z: 'foo', a: 'bar', d: 'quz' })).toBe('a-bar-d-quz-z-foo')
-  })
+    assert.equal(oh({ z: 'foo', a: 'bar', d: 'quz' }), 'a-bar-d-quz-z-foo');
+  });
 
   it('should handle functions', function () {
-    expect(oh(function foo () {})).toBe('foo')
-    expect(oh(function () {})).toBe('function')
-  })
+    assert.equal(oh(function foo () {}), 'foo');
+    assert.equal(oh(function () {}), 'function');
+  });
 
   it('should handle strings', function () {
-    expect(oh('foo')).toBe('foo')
-  })
+    assert.equal(oh('foo'), 'foo');
+  });
 
   it('should handle null values', function () {
-    expect(oh(null)).toBe('null')
-    expect(oh(undefined)).toBe('null')
-  })
+    assert.equal(oh(null), 'null');
+    assert.equal(oh(void 0), 'null');
+  });
 
   it('should handle booleans', function () {
-    expect(oh(true)).toBe('true')
-    expect(oh(false)).toBe('false')
-  })
+    assert.equal(oh(true), 'true');
+    assert.equal(oh(false), 'false');
+  });
 
   it('should handle numbers', function () {
-    expect(oh(12)).toBe('12')
-    expect(oh(12.3)).toBe('12.3')
-  })
+    assert.equal(oh(12), '12');
+    assert.equal(oh(12.3), '12.3');
+  });
 
   it('should support custom separators', function () {
-    expect(oh({ foo: 'bar', quz: 'baz' }, '+')).toBe('foo+bar+quz+baz')
-  })
+    assert.equal(oh({ foo: 'bar', quz: 'baz' }, '+'), 'foo+bar+quz+baz')
+  });
 
   it('should handle recursive structures', function () {
-    const obj = { zoo: 'bar', qwe: ['foo', { xar: 'boom', abc: { tululu: 'bim' } }], bar: { quz: 'foo', aze: 'qwe', beach: 23 } }
-    const expected = 'bar-aze-qwe-beach-23-quz-foo-qwe-foo-abc-tululu-bim-xar-boom-zoo-bar'
+    var obj = {
+      zoo: 'bar',
+      qwe: [
+        'foo',
+        {
+          xar: 'boom',
+          abc: {
+            tululu: 'bim'
+          }
+        }],
+      bar: {
+        quz: 'foo',
+        aze: 'qwe',
+        beach: 23
+      }
+    };
 
-    expect(oh(obj)).toBe(expected)
-  })
-})
+    var expected = 'bar-aze-qwe-beach-23-quz-foo-qwe-foo-abc-tululu-bim-xar-boom-zoo-bar';
+
+    assert.equal(oh(obj), expected);
+  });
+});
